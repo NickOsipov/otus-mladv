@@ -9,7 +9,7 @@ import pandas as pd
 from loguru import logger
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_absolute_error
+from sklearn.metrics import mean_absolute_error, median_absolute_error
 
 # pylint: disable=invalid-name
 
@@ -54,9 +54,17 @@ def train_model(X_train, X_test, y_train, y_test):
 
     # Вычисление метрик качества
     mae = mean_absolute_error(y_test, y_pred)
+    median_ae = median_absolute_error(y_test, y_pred)
 
     # Вывод метрик качества
     logger.info(f"Mean Absolute Error: {mae}")
+    logger.info(f"Median Absolute Error: {median_ae}")
+
+    metrics = pd.DataFrame({
+        "mae": [mae],
+        "median_ae": [median_ae]
+    })
+    metrics.to_csv("metrics.csv", index=False)
 
     return rf_model
 
